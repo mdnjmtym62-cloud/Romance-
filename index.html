@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Je veux qu'on discute</title>
+  
+  <!-- Polices élégantes -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Bibliothèque de Confettis -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #5c1428;
+      --primary-hover: #450e1d;
+      --gold-color: #d4af37;
+      --text-dark: #241c1e;
+      --text-muted: #7d6f72;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('image.png.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid #ebdccb;
+      border-radius: 20px;
+      padding: 35px 22px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+    }
+
+    .subtitle-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    h1.title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 30px;
+      line-height: 1.2;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    p.description {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      min-height: 120px;
+    }
+
+    /* Bouton Principal */
+    .btn-yes {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(92, 20, 40, 0.25);
+      transition: transform 0.2s, opacity 0.2s;
+      width: 100%;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+    .btn-yes:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    /* Bouton Secondaire qui s'enfuit */
+    .btn-no {
+      background: transparent;
+      border: 1.5px solid #ebdccb;
+      color: var(--text-dark);
+      padding: 15px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+    .btn-no:hover {
+      background: #f4eee4;
+    }
+
+    /* Vue de succès */
+    .success-view {
+      display: none;
+    }
+    .success-view.active {
+      display: block;
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .main-view.hidden {
+      display: none;
+    }
+
+    .success-box {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--primary-color);
+      font-style: italic;
+      background: #fcfaf7;
+      border: 1px dashed var(--gold-color);
+      border-radius: 12px;
+      padding: 20px 15px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .hook-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      
+      <!-- VUE PRINCIPALE -->
+      <div id="mainView" class="main-view">
+        <div class="subtitle-tag">La Demande</div>
+        <h1 class="title">Je veux qu'on discute.</h1>
+        <p class="description">On ne va pas rester fâchés comme ça... Tu m'accordes un moment pour qu'on pose les choses calmement ?</p>
+
+        <div class="btn-group" id="btnGroup">
+          <button class="btn-yes" onclick="acceptDiscussion()">D'accord, on discute ❤️</button>
+          <button class="btn-no" id="btnNo" onclick="moveButton()" ontouchstart="moveButton()">Je boude encore 😤</button>
+        </div>
+      </div>
+
+      <!-- VUE DE SUCCÈS (Redirection WhatsApp) -->
+      <div id="successView" class="success-view">
+        <div class="subtitle-tag">Message de paix</div>
+        <h1 class="title">J'attends ton mot...</h1>
+        
+        <div class="success-box" id="userExcuseBox">
+          <!-- Ton message d'excuse (tu peux le modifier directement ici si tu veux changer de mots) -->
+          "Je déteste quand il y a des tensions entre nous. Je sais qu'on s'est mal compris, et je veux qu'on règle ça. Tu me manques trop pour qu'on reste comme ça..."
+        </div>
+
+        <p class="hook-text">Prête à crever l'abcès ? Viens me dire ce que tu as sur le cœur en un clic sur WhatsApp 👇</p>
+
+        <!-- Pense à remplacer 2250000000000 par ton vrai numéro WhatsApp au format international sans le + -->
+        <a id="whatsappBtn" href="https://wa.me/2250000000000?text=Coucou,%20j'ai%20lu%20ta%20demande..." class="btn-yes" target="_blank">Réagir sur WhatsApp 💬</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function moveButton() {
+      const btnNo = document.getElementById('btnNo');
+      const randomX = (Math.random() - 0.5) * 140;
+      const randomY = (Math.random() - 0.5) * 70;
+      btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+    }
+
+    function acceptDiscussion() {
+      document.getElementById('mainView').classList.add('hidden');
+      document.getElementById('successView').classList.add('active');
+
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#5c1428', '#d4af37', '#ffffff']
+      });
+    }
+  </script>
+</body>
+</html>
