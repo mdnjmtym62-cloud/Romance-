@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Bocal des 30 Jours 🫙💖</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            overflow-x: hidden;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+        h1 {
+            font-size: 1.6rem;
+            color: #d81b60;
+            margin-bottom: 5px;
+        }
+        .jar-icon {
+            font-size: 4rem;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .jar-icon:hover {
+            transform: scale(1.1);
+        }
+        p {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .btn-draw {
+            background-color: #d81b60;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(216,27,96,0.3);
+            transition: 0.2s;
+        }
+        .btn-draw:hover {
+            background-color: #c2185b;
+            transform: scale(1.03);
+        }
+        #message-card {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: none;
+            animation: fadeIn 0.5s ease;
+            border-left: 5px solid #d81b60;
+            text-align: left;
+        }
+        #message-card h3 {
+            margin-top: 0;
+            color: #d81b60;
+            font-size: 1.1rem;
+        }
+        #message-card p {
+            color: #333;
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        #timer-box {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #d81b60;
+            font-weight: bold;
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Le Bocal de l'Amour 🫙</h1>
+        <p>30 jours, 30 mots doux. Un seul message par jour rien que pour toi !</p>
+        
+        <div class="jar-icon" onclick="openJar()">🫙</div>
+        
+        <button class="btn-draw" id="action-btn" onclick="openJar()">Piocher le message du jour ✨</button>
+
+        <div id="timer-box"></div>
+
+        <div id="message-card">
+            <h3 id="msg-title">Jour 1</h3>
+            <p id="msg-text">Texte du message...</p>
+        </div>
+    </div>
+
+    <script>
+        // 30 messages personnalisés pour les 30 jours
+        const messages30 = [
+            "Jour 1 : Tu es la première pensée de mes matins et la plus douce de mes nuits. ❤️",
+            "Jour 2 : J'adore ton sourire, c'est ce qui illumine mes journées les plus sombres. ✨",
+            "Jour 3 : Merci d'être simplement toi, quelqu'un d'extraordinaire. 🌹",
+            "Jour 4 : J'ai hâte de notre prochain moment rien qu'à tous les deux. 🥂",
+            "Jour 5 : Même à distance ou occupés, tu es toujours dans mon cœur. 💭",
+            "Jour 6 : Tu es mon plus beau hasard et ma plus belle certitude. 💫",
+            "Jour 7 : Chacun de tes messages me fait fondre, ne change jamais. 🥰",
+            "Jour 8 : J'aime la façon dont tu vois le monde et la douceur que tu y mets. 🌍",
+            "Jour 9 : Tu me donnes envie d'être la meilleure version de moi-même. 🌟",
+            "Jour 10 : Un tiers du chemin ! J'espère que tu penses à moi autant que je pense à toi. 💖",
+            "Jour 11 : Ton rire est ma mélodie préférée au monde. 🎶",
+            "Jour 12 : J'ai tellement de chance de t'avoir dans ma vie. 🍀",
+            "Jour 13 : Tu es mon petit rayon de soleil quotidien. ☀️",
+            "Jour 14 : Rien ne remplace la chaleur de ta présence. 🤗",
+            "Jour 15 : À mi-chemin ! J'espère que ce petit rituel te fait sourire chaque jour. 💌",
+            "Jour 16 : Tu es mon refuge, l'endroit où je me sens le plus bien. 🏡",
+            "Jour 17 : J'admire ta force, ton intelligence et tout ce que tu accomplis. 💪",
+            "Jour 18 : Petits ou grands moments, tout est mieux à tes côtés. 🌈",
+            "Jour 19 : Tu es mon petit secret précieux. 🤫❤️",
+            "Jour 20 : Plus que 10 jours dans le bocal, mais mon amour pour toi n'a pas de fin. ⏳",
+            "Jour 21 : J'aime nos discussions qui durent des heures sans qu'on voie le temps passer. 🕒",
+            "Jour 22 : Tu es incroyablement belle/beau (et tu le sais en plus !). 😉",
+            "Jour 23 : Merci pour tout le bonheur que tu m'apportes au quotidien. 🎁",
+            "Jour 24 : J'ai des étoiles plein les yeux dès que je pense à nous. ✨",
+            "Jour 25 : Bientôt la fin du bocal, mais ce n'est que le début de notre histoire. 📖",
+            "Jour 26 : Tu es mon coup de cœur permanent. 💘",
+            "Jour 27 : J'aime ton grain de folie et ta douceur réunis. 🌺",
+            "Jour 28 : Plus que deux jours... Prépare-toi à une surprise bientôt ! 🤫",
+            "Jour 29 : Avant-dernier message : Je t'aime un peu, beaucoup, passionnément... à la folie ! 🔥",
+            "Jour 30 : 30ème jour ! Le bocal est vide, mais mon amour pour toi grandit chaque jour un peu plus. Je t'embrasse fort ! 👑❤️"
+        ];
+
+        function checkStatus() {
+            const lastOpenTime = localStorage.getItem('lastOpenTime');
+            const currentDayCount = parseInt(localStorage.getItem('dayCount') || '0');
+            const now = new Date().getTime();
+
+            if (currentDayCount >= 30) {
+                document.getElementById('action-btn').style.display = 'none';
+                document.getElementById('timer-box').style.display = 'block';
+                document.getElementById('timer-box').innerText = "🎉 Tu as ouvert tous les messages du bocal ! Merci pour ce voyage de 30 jours.";
+                return;
+            }
+
+            if (lastOpenTime) {
+                const twentyFourHours = 24 * 60 * 60 * 1000;
+                // Pour tester facilement, tu peux remplacer 24 par 0 (ou baisser le temps), mais laisse 24h pour le vrai rendu
+                const elapsed = now - parseInt(lastOpenTime);
+                
+                if (elapsed < twentyFourHours) {
+                    // Bloqué, on lance le compte à rebours
+                    document.getElementById('action-btn').style.display = 'none';
+                    document.getElementById('timer-box').style.display = 'block';
+                    startCountdown(twentyFourHours - elapsed);
+                    
+                    // Afficher quand même le dernier message ouvert
+                    const lastDay = parseInt(localStorage.getItem('lastDay') || '1');
+                    showMsgContent(lastDay);
+                }
+            }
+        }
+
+        function openJar() {
+            let currentDayCount = parseInt(localStorage.getItem('dayCount') || '0');
+            
+            if (currentDayCount >= 30) return;
+
+            currentDayCount++;
+            localStorage.setItem('dayCount', currentDayCount);
+            localStorage.setItem('lastDay', currentDayCount);
+            localStorage.setItem('lastOpenTime', new Date().getTime());
+
+            showMsgContent(currentDayCount);
+
+            // Cacher le bouton et afficher le timer
+            document.getElementById('action-btn').style.display = 'none';
+            document.getElementById('timer-box').style.display = 'block';
+            startCountdown(24 * 60 * 60 * 1000);
+        }
+
+        function showMsgContent(dayNum) {
+            const card = document.getElementById('message-card');
+            card.style.display = 'block';
+            document.getElementById('msg-title').innerText = `Message du Jour ${dayNum}`;
+            document.getElementById('msg-text').innerText = messages30[dayNum - 1];
+        }
+
+        function startCountdown(durationMs) {
+            let timeLeft = durationMs;
+            const timerBox = document.getElementById('timer-box');
+
+            const interval = setInterval(() => {
+                timeLeft -= 1000;
+                if (timeLeft <= 0) {
+                    clearInterval(interval);
+                    localStorage.removeItem('lastOpenTime'); // Débloque pour le jour suivant
+                    document.getElementById('action-btn').style.display = 'inline-block';
+                    timerBox.style.display = 'none';
+                    return;
+                }
+
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                timerBox.innerText = `⏳ Prochain message disponible dans : ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+        }
+
+        // Vérifier l'état au chargement de la page
+        window.onload = checkStatus;
+    </script>
+</body>
+</html>
