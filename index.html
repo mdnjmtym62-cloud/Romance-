@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer une demande - Je veux qu'on discute</title>
+  
+  <!-- Polices élégantes -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #5c1428;
+      --primary-hover: #450e1d;
+      --gold-color: #d4af37;
+      --text-dark: #241c1e;
+      --text-muted: #7d6f72;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.25)), url('image.png.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+      border: 1px solid #ebdccb;
+      border-radius: 20px;
+      padding: 35px 22px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .subtitle-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    h1.title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1.2;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    p.description {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1.5px solid #ebdccb;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-dark);
+      background: #fcfaf7;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--primary-color);
+    }
+
+    textarea {
+      resize: vertical;
+      height: 90px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+      color: #ffffff;
+      border: none;
+      padding: 15px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(92, 20, 40, 0.25);
+      width: 100%;
+      margin-top: 10px;
+      transition: opacity 0.2s;
+    }
+    .btn-submit:hover {
+      opacity: 0.95;
+    }
+
+    /* Zone de résultat (le lien généré) */
+    .result-box {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: #fcfaf7;
+      border: 1px dashed var(--gold-color);
+      border-radius: 12px;
+      text-align: left;
+    }
+    .result-box.active {
+      display: block;
+    }
+    .result-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .link-output {
+      font-size: 12px;
+      word-break: break-all;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 10px;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card">
+      <div class="subtitle-tag">Générateur</div>
+      <h1 class="title">Crée ta demande</h1>
+      <p class="description">Personnalise ce message pour apaiser les choses avec la personne de ton choix.</p>
+
+      <div class="form-group">
+        <label>Son Prénom</label>
+        <input type="text" id="targetName" placeholder="Ex: Prunelle ou Colombe">
+      </div>
+
+      <div class="form-group">
+        <label>Ton Numéro WhatsApp (avec indicatif)</label>
+        <input type="text" id="whatsappNumber" placeholder="Ex: 2250102030405">
+      </div>
+
+      <div class="form-group">
+        <label>Ton message d'excuse</label>
+        <textarea id="customMessage">Je déteste quand il y a des tensions entre nous. Je sais qu'on s'est mal compris, et je veux qu'on règle ça. Tu me manques trop pour qu'on reste comme ça...</textarea>
+      </div>
+
+      <button class="btn-submit" onclick="generateLink()">Générer mon lien magique ✨</button>
+
+      <!-- Résultat -->
+      <div class="result-box" id="resultBox">
+        <p>Ton lien personnalisé est prêt :</p>
+        <span class="link-output" id="finalLink"></span>
+        <button class="btn-submit" onclick="copyLink()" style="padding: 10px; font-size: 11px;">Copier le lien 📋</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function generateLink() {
+      const name = document.getElementById('targetName').value.trim();
+      const phone = document.getElementById('whatsappNumber').value.trim();
+      const message = document.getElementById('customMessage').value.trim();
+
+      if (!phone) {
+        alert("Veuillez entrer votre numéro WhatsApp !");
+        return;
+      }
+
+      // Récupère l'URL de base actuelle du site (ex: https://tonsite.github.io/)
+      const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      
+      // Encode les données pour qu'elles passent bien dans l'URL
+      const encodedMsg = encodeURIComponent(message);
+      const encodedName = encodeURIComponent(name);
+
+      const generatedUrl = `${baseUrl}index.html?phone=${phone}&name=${encodedName}&msg=${encodedMsg}`;
+
+      document.getElementById('finalLink').innerText = generatedUrl;
+      document.getElementById('resultBox').classList.add('active');
+    }
+
+    function copyLink() {
+      const linkText = document.getElementById('finalLink').innerText;
+      navigator.clipboard.writeText(linkText).then(() => {
+        alert("Lien copié dans le presse-papier ! Tu peux l'envoyer.");
+      });
+    }
+  </script>
+</body>
+</html>
